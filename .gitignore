@@ -1,0 +1,36 @@
+# =========================
+# .NET / ASP.NET Core
+# =========================
+**/bin/
+**/obj/
+.vs/
+*.user
+*.suo
+
+# Configuración local / secretos
+**/appsettings.Development.json
+
+# =========================
+# React / Vite
+# =========================
+frontend/node_modules/
+frontend/dist/
+
+# Variables de entorno
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+
+# =========================
+# IDEs
+# =========================
+.idea/
+
+# =========================
+# Sistema operativo
+# =========================
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
