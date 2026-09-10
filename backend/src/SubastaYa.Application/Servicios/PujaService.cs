@@ -64,7 +64,7 @@ public class PujaService
                     {
                         BilleteraId = billeteraAnterior.Id,
                         SubastaId = subasta.Id,
-                        Tipo = TipoMovimientoBilletera.Devolucion,
+                        Tipo = TipoMovimientoBilletera.Liberacion,
                         Monto = pujaMaxima.Monto,
                         OperacionId = Guid.NewGuid(),
                         Fecha = ahora
