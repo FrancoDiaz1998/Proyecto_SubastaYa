@@ -15,7 +15,7 @@ public enum TipoMovimientoBilletera
 {
     Deposito,
     Retencion,
-    Liberacion,
+    Devolucion,
     Pago,
     Cobro
 }

@@ -14,6 +14,9 @@ public class Subasta
     public DateTimeOffset FechaFin { get; set; }
     public EstadoSubasta Estado { get; set; }
     public long Version { get; set; }
+
+    // Propiedad de navegación necesaria
+    public ICollection<Puja> Pujas { get; set; } = [];
 }
 
 public enum EstadoSubasta

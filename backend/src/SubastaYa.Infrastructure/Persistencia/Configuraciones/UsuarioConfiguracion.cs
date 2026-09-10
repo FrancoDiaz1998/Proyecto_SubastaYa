@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SubastaYa.Domain.Entidades;
 using SubastaYa.Infrastructure.Identidad;
 
 namespace SubastaYa.Infrastructure.Persistencia.Configuraciones;

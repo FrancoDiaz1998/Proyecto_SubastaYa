@@ -35,8 +35,8 @@ public class BilleteraConfiguracion : IEntityTypeConfiguration<Billetera>
             .HasDefaultValue(0L)
             .IsConcurrencyToken();
 
-        builder.HasOne<Usuario>()
-            .WithOne()
+        builder.HasOne(billetera => billetera.Usuario)
+            .WithOne(usuario => usuario.Billetera)
             .HasForeignKey<Billetera>(billetera => billetera.UsuarioId)
             .OnDelete(DeleteBehavior.Restrict);
 
