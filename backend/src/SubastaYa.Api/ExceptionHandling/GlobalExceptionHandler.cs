@@ -1,6 +1,6 @@
-using SubastaYa.Application.Common.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using SubastaYa.Application.Common.Exceptions;
 
 namespace SubastaYa.API.ExceptionHandling;
 
@@ -13,7 +13,9 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
         _logger = logger;
     }
 
-    public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
+    public async ValueTask<bool> TryHandleAsync(
+        HttpContext httpContext, Exception exception,
+        CancellationToken cancellationToken)
     {
         var (statusCode, title, detail) = exception switch
         {
@@ -30,6 +32,16 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
             RecursoDuplicadoException error => (
                 StatusCodes.Status409Conflict,
                 "El recurso ya existe",
+                error.Message),
+
+            PujaRechazadaException error => (
+                StatusCodes.Status409Conflict,
+                "Puja rechazada",
+                error.Message),
+
+            ConflictoConcurrenciaException error => (
+                StatusCodes.Status409Conflict,
+                "Conflicto de concurrencia",
                 error.Message),
 
             RecursoNoEncontradoException error => (
@@ -78,9 +90,7 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
 
         httpContext.Response.StatusCode = statusCode;
         httpContext.Response.ContentType = "application/problem+json";
-
         await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
-
         return true;
     }
 }

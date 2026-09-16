@@ -34,31 +34,26 @@ public sealed class SubastaRepository : ISubastaRepository
 
         if (estado.HasValue)
         {
-            query = estado == EstadoSubasta.Finalizada
-                ? query.Where(subasta =>
-                    subasta.Estado == EstadoSubasta.Finalizada ||
-                    subasta.Estado == EstadoSubasta.Desierta)
-                : query.Where(subasta => subasta.Estado == estado);
+            query = estado.Value == EstadoSubasta.Finalizada
+                ? query.Where(subasta => subasta.Estado == EstadoSubasta.Finalizada || subasta.Estado == EstadoSubasta.Desierta)
+                : query.Where(subasta => subasta.Estado == estado.Value);
         }
 
         if (categoriaId.HasValue)
-            query = query.Where(subasta => subasta.CategoriaId == categoriaId);
+            query = query.Where(subasta => subasta.CategoriaId == categoriaId.Value);
 
         if (precioMin.HasValue)
             query = query.Where(subasta =>
-                (subasta.Pujas.Select(puja => (decimal?)puja.Monto).Max()
-                    ?? subasta.PrecioBase) >= precioMin);
+                (subasta.Pujas.Select(puja => (decimal?)puja.Monto).Max() ?? subasta.PrecioBase) >= precioMin.Value);
 
         if (precioMax.HasValue)
             query = query.Where(subasta =>
-                (subasta.Pujas.Select(puja => (decimal?)puja.Monto).Max()
-                    ?? subasta.PrecioBase) <= precioMax);
+                (subasta.Pujas.Select(puja => (decimal?)puja.Monto).Max() ?? subasta.PrecioBase) <= precioMax.Value);
 
         query = orden?.Trim().ToLowerInvariant() switch
         {
             "puja_desc" => query.OrderByDescending(subasta =>
-                subasta.Pujas.Select(puja => (decimal?)puja.Monto).Max()
-                    ?? subasta.PrecioBase),
+                subasta.Pujas.Select(puja => (decimal?)puja.Monto).Max() ?? subasta.PrecioBase),
             _ => query.OrderBy(subasta => subasta.FechaFin)
         };
 
@@ -77,4 +72,11 @@ public sealed class SubastaRepository : ISubastaRepository
             .Include(subasta => subasta.Pujas)
                 .ThenInclude(puja => puja.Postor)
             .SingleOrDefaultAsync(subasta => subasta.Id == id, cancellationToken);
+
+    public async Task CrearAsync(
+        Subasta subasta, CancellationToken cancellationToken = default)
+    {
+        await _dbContext.Subastas.AddAsync(subasta, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
 }

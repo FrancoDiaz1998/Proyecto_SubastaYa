@@ -1,5 +1,13 @@
 import { apiRequest } from './apiClient';
-import type { FiltrosSubasta, ListarSubastasResponse, SubastaDetalle } from '../types/auction';
+import type {
+  CrearSubastaRequest,
+  CrearSubastaResponse,
+  FiltrosSubasta,
+  ListarSubastasResponse,
+  RegistrarPujaRequest,
+  RegistrarPujaResponse,
+  SubastaDetalle,
+} from '../types/auction';
 
 export function listarSubastas(filtros: FiltrosSubasta, signal?: AbortSignal) {
   const params = new URLSearchParams({ pagina: '1', tamanoPagina: '100', orden: filtros.orden });
@@ -15,3 +23,13 @@ export function listarSubastas(filtros: FiltrosSubasta, signal?: AbortSignal) {
 
 export const obtenerSubasta = (id: number, signal?: AbortSignal) =>
   apiRequest<SubastaDetalle>(`/api/v1/subastas/${id}`, { signal });
+
+export const crearSubasta = (request: CrearSubastaRequest) =>
+  apiRequest<CrearSubastaResponse>('/api/v1/subastas', {
+    method: 'POST', body: JSON.stringify(request),
+  });
+
+export const registrarPuja = (subastaId: number, request: RegistrarPujaRequest) =>
+  apiRequest<RegistrarPujaResponse>(`/api/v1/subastas/${subastaId}/pujas`, {
+    method: 'POST', body: JSON.stringify(request),
+  });
