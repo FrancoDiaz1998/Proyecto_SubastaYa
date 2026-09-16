@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, Sparkles, Clock } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 export const HeroBanner: React.FC = () => {
   return (
@@ -21,38 +21,8 @@ export const HeroBanner: React.FC = () => {
         </h1>
 
         <p className="mt-3 text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
-          Explora nuestro catálogo de productos verificados. Todas las ofertas operan bajo
-          arquitectura transaccional garantizada para compradores y vendedores.
+          Explorá productos, seguí las ofertas y encontrá tu próxima oportunidad.
         </p>
-
-        {/* Tarjetas de los dos pilares del TP (Página 1) */}
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 pt-6 border-t border-slate-800/80">
-          {/* Pilar 1: Escrow */}
-          <div className="flex items-start gap-3 bg-white/5 border border-white/10 rounded-xl p-3 backdrop-blur-xs">
-            <div className="p-2 rounded-lg bg-emerald-500/20 text-emerald-400 shrink-0">
-              <ShieldCheck className="w-4 h-4" />
-            </div>
-            <div>
-              <h4 className="text-xs font-bold text-white">Garantía Escrow</h4>
-              <p className="text-[11px] text-slate-300 mt-0.5 leading-snug">
-                Cada puja congela saldo real en billetera. Si te superan, se libera al instante.
-              </p>
-            </div>
-          </div>
-
-          {/* Pilar 2: Anti-Sniping */}
-          <div className="flex items-start gap-3 bg-white/5 border border-white/10 rounded-xl p-3 backdrop-blur-xs">
-            <div className="p-2 rounded-lg bg-amber-500/20 text-amber-400 shrink-0">
-              <Clock className="w-4 h-4" />
-            </div>
-            <div>
-              <h4 className="text-xs font-bold text-white">Juego Limpio Anti-Sniping</h4>
-              <p className="text-[11px] text-slate-300 mt-0.5 leading-snug">
-                Pujas en los últimos 60 segundos extienden automáticamente el cierre en +2 minutos.
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

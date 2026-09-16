@@ -1,4 +1,4 @@
-import type { Categoria, Subasta } from '../types/auction';
+import type { Categoria, SubastaDetalle } from '../types/auction';
 
 export const CATEGORIAS_SEED: Categoria[] = [
   { id: 1, nombre: 'Tecnología', urlIcono: 'Laptop' },
@@ -8,7 +8,7 @@ export const CATEGORIAS_SEED: Categoria[] = [
   { id: 5, nombre: 'Arte', urlIcono: 'Palette' },
 ];
 
-export const getSeedAuctions = (): Subasta[] => {
+export const getSeedAuctions = (): SubastaDetalle[] => {
   const ahora = new Date();
 
   return [

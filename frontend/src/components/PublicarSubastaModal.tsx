@@ -153,7 +153,7 @@ export function PublicarSubastaModal({ abierto, categorias, onClose, onCreada }:
                   <div><label className="text-xs font-bold text-slate-600">Fecha y hora de inicio</label><input type="datetime-local" value={form.fechaInicio} onChange={(e) => cambiar('fechaInicio', e.target.value)} className={claseInput(errores.fechaInicio)} />{errores.fechaInicio && <p className="mt-1 text-[10px] text-red-600">{errores.fechaInicio}</p>}</div>
                   <div><label className="text-xs font-bold text-slate-600">Fecha y hora de finalización</label><input type="datetime-local" value={form.fechaFin} onChange={(e) => cambiar('fechaFin', e.target.value)} className={claseInput(errores.fechaFin)} />{errores.fechaFin && <p className="mt-1 text-[10px] text-red-600">{errores.fechaFin}</p>}</div>
                 </div>
-                <p className="mt-2 text-[10px] text-slate-500">Si la fecha de inicio ya llegó, el backend la publica como Activa; si es futura, queda Programada.</p>
+                <p className="mt-2 text-[10px] text-slate-500">Las subastas con fecha futura comenzarán automáticamente cuando llegue el momento indicado.</p>
               </section>
             </div>
 
@@ -175,7 +175,6 @@ export function PublicarSubastaModal({ abierto, categorias, onClose, onCreada }:
                 </div>
 
                 {errorApi && <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs font-semibold text-red-700">{errorApi}</div>}
-                <div className="p-3 rounded-xl bg-blue-50 border border-blue-100 text-[11px] text-blue-800">La subasta se guardará en PostgreSQL y quedará asociada al usuario autenticado mediante su JWT.</div>
                 <div className="flex gap-2"><button type="button" onClick={onClose} disabled={enviando} className="flex-1 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 cursor-pointer disabled:opacity-50">Cancelar</button><button type="submit" disabled={enviando || categorias.length === 0} className="flex-[1.4] py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold cursor-pointer disabled:opacity-50">{enviando ? 'Publicando...' : 'Publicar subasta'}</button></div>
               </div>
             </aside>

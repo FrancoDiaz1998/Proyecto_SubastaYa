@@ -23,7 +23,7 @@ export function AuctionCard({ subasta, onSelect }: Props) {
         <div className="absolute top-3 right-3"><span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-white/90 text-slate-800"><Tag className="w-3 h-3 text-blue-600" />{subasta.categoriaNombre}</span></div>
         <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
           <CountdownTimer targetDate={programada ? subasta.fechaInicio : subasta.fechaFin} isScheduled={programada} isEnded={finalizada} />
-          {activa && <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-black/60 text-slate-200"><ShieldCheck className="w-3.5 h-3.5 text-blue-400" />Escrow</div>}
+          {activa && <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-black/60 text-slate-200"><ShieldCheck className="w-3.5 h-3.5 text-blue-400" />Oferta protegida</div>}
         </div>
       </div>
 

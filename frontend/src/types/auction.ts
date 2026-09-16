@@ -8,6 +8,7 @@ export interface Categoria {
 
 export interface Puja {
   id: number;
+  subastaId: number;
   postorNombre: string;
   monto: number;
   fecha: string;
@@ -27,7 +28,7 @@ export interface SubastaResumen {
 }
 
 export interface SubastaDetalle extends SubastaResumen {
-  vendedorId: string;
+  vendedorId?: string;
   vendedorNombre?: string | null;
   descripcion: string;
   precioBase: number;

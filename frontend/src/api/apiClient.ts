@@ -4,7 +4,12 @@ const TOKEN_KEY = 'subastaya_token';
 interface ProblemDetails { detail?: string; title?: string; }
 
 export class ApiError extends Error {
-  constructor(public status: number, message: string) { super(message); }
+  readonly status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.status = status;
+  }
 }
 
 export const guardarToken = (token: string) => localStorage.setItem(TOKEN_KEY, token);

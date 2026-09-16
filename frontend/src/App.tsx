@@ -216,10 +216,10 @@ export function App() {
 
       agregarToast(
         resultado.extendidaPorAntiSniping ? 'warning' : 'success',
-        resultado.extendidaPorAntiSniping ? 'Anti-Sniping activado' : 'Puja registrada',
+        resultado.extendidaPorAntiSniping ? 'Cierre extendido' : 'Puja registrada',
         resultado.extendidaPorAntiSniping
           ? `Oferta de ${formatCurrency(monto)} aceptada. El cierre se extendió 2 minutos.`
-          : `Oferta de ${formatCurrency(monto)} registrada y respaldada por Escrow.`,
+          : `Oferta de ${formatCurrency(monto)} registrada y protegida.`,
       );
 
       return resultado;
@@ -254,7 +254,7 @@ export function App() {
         <FilterBar filtros={filtros} onChangeFiltros={setFiltros} categorias={categorias} totalResultados={totalResultados} vistaModo={vistaModo} onToggleVista={setVistaModo} onResetFiltros={() => setFiltros({ ...FILTROS_INICIALES })} />
 
         {errorCatalogo && <div className="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-sm text-red-800"><strong>No se pudo cargar el catálogo.</strong> {errorCatalogo}</div>}
-        {cargando ? <div className="py-16 text-center text-sm text-slate-500">Cargando subastas desde la API...</div> : subastas.length === 0 ? <EmptyState onReset={() => setFiltros({ ...FILTROS_INICIALES })} /> : vistaModo === 'grid' ? (
+        {cargando ? <div className="py-16 text-center text-sm text-slate-500">Cargando subastas...</div> : subastas.length === 0 ? <EmptyState onReset={() => setFiltros({ ...FILTROS_INICIALES })} /> : vistaModo === 'grid' ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">{subastas.map((subasta) => <AuctionCard key={subasta.id} subasta={subasta} onSelect={handleSelectSubasta} />)}</div>
         ) : (
           <div className="space-y-4">{subastas.map((subasta) => <AuctionListItem key={subasta.id} subasta={subasta} onSelect={handleSelectSubasta} />)}</div>
@@ -273,7 +273,7 @@ export function App() {
       <LoginModal abierto={loginAbierto} onClose={() => { setLoginAbierto(false); setAccionPostLogin(null); }} onSuccess={handleLoginSuccess} />
       <ToastNotification toasts={toasts} onDismiss={(id) => setToasts((prev) => prev.filter((toast) => toast.id !== id))} />
 
-      <footer className="bg-white border-t border-slate-200 mt-16 py-8 text-xs text-slate-500"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4"><p><strong>SubastaYa</strong> &copy; {new Date().getFullYear()} — Proyecto de Software.</p><span className="inline-flex items-center gap-1.5 text-emerald-600 font-semibold"><span className="w-2 h-2 rounded-full bg-emerald-500 live-indicator-dot" />Escrow, worker y actividades sincronizados</span></div></footer>
+      <footer className="bg-white border-t border-slate-200 mt-16 py-8 text-xs text-slate-500"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center"><p><strong>SubastaYa</strong> &copy; {new Date().getFullYear()}</p></div></footer>
     </div>
   );
 }

@@ -128,7 +128,7 @@ export function BilleteraModal({
         <div className="px-5 sm:px-6 py-4 border-b border-slate-100 bg-slate-50/80 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center"><Wallet className="w-5 h-5" /></div>
-            <div><h2 className="font-black text-slate-900">Billetera Virtual</h2><p className="text-[11px] text-slate-500">Escrow, saldo disponible y libro mayor</p></div>
+            <div><h2 className="font-black text-slate-900">Billetera Virtual</h2><p className="text-[11px] text-slate-500">Consultá tu saldo y tus movimientos</p></div>
           </div>
           <button type="button" onClick={onClose} className="p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200 cursor-pointer"><X className="w-5 h-5" /></button>
         </div>
@@ -158,8 +158,8 @@ export function BilleteraModal({
 
               <section className="grid grid-cols-1 lg:grid-cols-12 gap-5">
                 <div className="lg:col-span-4 rounded-2xl border border-slate-200 p-4 sm:p-5 bg-white">
-                  <div className="flex items-center gap-2"><BadgeDollarSign className="w-4 h-4 text-blue-600" /><h3 className="text-sm font-black text-slate-900">Carga de saldo simulada</h3></div>
-                  <p className="mt-1 text-[11px] text-slate-500">Acredita fondos ficticios para probar las pujas y el comportamiento de Escrow.</p>
+                  <div className="flex items-center gap-2"><BadgeDollarSign className="w-4 h-4 text-blue-600" /><h3 className="text-sm font-black text-slate-900">Agregar saldo</h3></div>
+                  <p className="mt-1 text-[11px] text-slate-500">Acreditá saldo para participar en nuevas subastas.</p>
 
                   <div className="mt-4 space-y-3">
                     <div>
@@ -177,7 +177,7 @@ export function BilleteraModal({
 
                 <div className="lg:col-span-8 rounded-2xl border border-slate-200 overflow-hidden bg-white">
                   <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
-                    <div className="flex items-center gap-2"><History className="w-4 h-4 text-blue-600" /><div><h3 className="text-sm font-black text-slate-900">Historial de movimientos</h3><p className="text-[10px] text-slate-500">Últimos movimientos registrados en el ledger</p></div></div>
+                    <div className="flex items-center gap-2"><History className="w-4 h-4 text-blue-600" /><div><h3 className="text-sm font-black text-slate-900">Historial de movimientos</h3><p className="text-[10px] text-slate-500">Consultá los movimientos de tu cuenta</p></div></div>
                     <button type="button" onClick={() => cargarMovimientos()} disabled={cargandoMovimientos} className="p-2 rounded-lg text-slate-500 hover:bg-slate-200 cursor-pointer disabled:cursor-wait" title="Actualizar"><RefreshCcw className={`w-4 h-4 ${cargandoMovimientos ? 'animate-spin' : ''}`} /></button>
                   </div>
 
