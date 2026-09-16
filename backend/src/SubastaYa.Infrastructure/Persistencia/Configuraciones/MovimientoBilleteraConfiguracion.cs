@@ -4,12 +4,15 @@ using SubastaYa.Domain.Entidades;
 
 namespace SubastaYa.Infrastructure.Persistencia.Configuraciones;
 
-public class MovimientoBilleteraConfiguracion : IEntityTypeConfiguration<MovimientoBilletera>
+public class MovimientoBilleteraConfiguracion
+    : IEntityTypeConfiguration<MovimientoBilletera>
 {
     public void Configure(EntityTypeBuilder<MovimientoBilletera> builder)
     {
         builder.ToTable("movimientos_billetera", tabla =>
-            tabla.HasCheckConstraint("ck_movimientos_billetera_monto", "monto > 0"));
+            tabla.HasCheckConstraint(
+                "ck_movimientos_billetera_monto",
+                "monto > 0"));
 
         builder.HasKey(movimiento => movimiento.Id);
 
@@ -38,17 +41,18 @@ public class MovimientoBilleteraConfiguracion : IEntityTypeConfiguration<Movimie
             .HasColumnName("fecha")
             .HasColumnType("timestamp with time zone");
 
-        builder.HasOne<Billetera>()
-            .WithMany()
+        builder.HasOne(movimiento => movimiento.Billetera)
+            .WithMany(billetera => billetera.Movimientos)
             .HasForeignKey(movimiento => movimiento.BilleteraId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne<Subasta>()
+        builder.HasOne(movimiento => movimiento.Subasta)
             .WithMany()
             .HasForeignKey(movimiento => movimiento.SubastaId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasIndex(movimiento => new { movimiento.BilleteraId, movimiento.Fecha })
+        builder.HasIndex(movimiento =>
+                new { movimiento.BilleteraId, movimiento.Fecha })
             .HasDatabaseName("ix_movimientos_billetera_fecha");
 
         builder.HasIndex(movimiento => movimiento.OperacionId)

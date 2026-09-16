@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SubastaYa.Domain.Entidades;
-using SubastaYa.Infrastructure.Identidad;
 
 namespace SubastaYa.Infrastructure.Persistencia.Configuraciones;
 
@@ -31,13 +30,13 @@ public class PujaConfiguracion : IEntityTypeConfiguration<Puja>
             .HasColumnName("fecha")
             .HasColumnType("timestamp with time zone");
 
-        builder.HasOne<Subasta>()
-            .WithMany()
+        builder.HasOne(puja => puja.Subasta)
+            .WithMany(subasta => subasta.Pujas)
             .HasForeignKey(puja => puja.SubastaId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne<Usuario>()
-            .WithMany()
+        builder.HasOne(puja => puja.Postor)
+            .WithMany(usuario => usuario.Pujas)
             .HasForeignKey(puja => puja.PostorId)
             .OnDelete(DeleteBehavior.Restrict);
 

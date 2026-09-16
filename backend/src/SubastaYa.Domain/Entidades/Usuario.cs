@@ -10,6 +10,8 @@ public class Usuario
 
     public string PasswordHash { get; set; } = string.Empty;
 
+    public DateTimeOffset FechaRegistro { get; set; } = DateTimeOffset.UtcNow;
+
     public Billetera? Billetera { get; set; }
 
     public ICollection<Subasta> SubastasPublicadas { get; set; } = [];

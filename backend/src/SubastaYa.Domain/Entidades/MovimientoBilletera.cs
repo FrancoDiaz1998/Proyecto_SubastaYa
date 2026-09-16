@@ -9,6 +9,9 @@ public class MovimientoBilletera
     public decimal Monto { get; set; }
     public Guid OperacionId { get; set; }
     public DateTimeOffset Fecha { get; set; }
+
+    public Billetera? Billetera { get; set; }
+    public Subasta? Subasta { get; set; }
 }
 
 public enum TipoMovimientoBilletera

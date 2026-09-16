@@ -14,6 +14,10 @@ public class Subasta
     public DateTimeOffset FechaFin { get; set; }
     public EstadoSubasta Estado { get; set; }
     public long Version { get; set; }
+
+    public Usuario? Vendedor { get; set; }
+    public Categoria? Categoria { get; set; }
+    public ICollection<Puja> Pujas { get; set; } = [];
 }
 
 public enum EstadoSubasta

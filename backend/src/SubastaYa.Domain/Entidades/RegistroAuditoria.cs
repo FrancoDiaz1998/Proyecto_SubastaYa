@@ -9,4 +9,6 @@ public class RegistroAuditoria
     public required string Accion { get; set; }
     public required string DetallesJson { get; set; }
     public DateTimeOffset Fecha { get; set; }
+
+    public Usuario? UsuarioActor { get; set; }
 }

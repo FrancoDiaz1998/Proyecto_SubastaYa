@@ -8,4 +8,8 @@ public class Venta
     public Guid VendedorId { get; set; }
     public decimal PrecioFinal { get; set; }
     public DateTimeOffset Fecha { get; set; }
+
+    public Subasta? Subasta { get; set; }
+    public Usuario? Comprador { get; set; }
+    public Usuario? Vendedor { get; set; }
 }

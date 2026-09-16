@@ -1,1 +1,210 @@
 @import "tailwindcss";
+
+/* ========================================================
+   SubastaYa - Estilos Personalizados, Animaciones y Pseudoclases
+   ======================================================== */
+
+:root {
+  --color-primary: #3b82f6;
+  --color-primary-dark: #1d4ed8;
+  --color-critical: #ef4444;
+  --color-warning: #f59e0b;
+  --color-success: #10b981;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* Animación para zona crítica de Anti-Sniping (< 60 segundos) */
+@keyframes pulse-critical {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    border-color: rgba(239, 68, 68, 1);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 16px 4px rgba(239, 68, 68, 0.4);
+    border-color: rgba(248, 113, 113, 1);
+    transform: scale(1.02);
+  }
+}
+
+/* Animación para advertencia (< 2 minutos) */
+@keyframes pulse-warning {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5);
+    border-color: rgba(245, 158, 11, 0.9);
+  }
+  50% {
+    box-shadow: 0 0 10px 2px rgba(245, 158, 11, 0.3);
+    border-color: rgba(251, 191, 36, 1);
+  }
+}
+
+/* Shimmer para efectos de brillo en tarjetas */
+@keyframes shimmer-border {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Radar ping para subastas en vivo */
+@keyframes live-ping {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+}
+
+/* Card de Subasta con transición avanzada y pseudoclases */
+.auction-card {
+  position: relative;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.35s ease;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 1rem;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+/* Pseudoclase :hover sobre la card */
+.auction-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.08),
+              0 8px 10px -6px rgba(15, 23, 42, 0.04),
+              0 0 0 1px rgba(59, 130, 246, 0.15);
+  border-color: rgba(147, 197, 253, 0.8);
+}
+
+/* Pseudoelemento ::before para halo sutil superior al hover */
+.auction-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.auction-card:hover::before {
+  opacity: 1;
+}
+
+/* Zoom suave de imagen en hover */
+.card-image-container {
+  overflow: hidden;
+  position: relative;
+}
+
+.card-image {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.auction-card:hover .card-image {
+  transform: scale(1.06);
+}
+
+/* Temporizador con clases CSS dedicadas */
+.timer-badge {
+  transition: all 0.25s ease;
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-critical {
+  animation: pulse-critical 1.2s infinite ease-in-out;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  color: #b91c1c;
+  border: 1.5px solid #f87171;
+}
+
+.timer-warning {
+  animation: pulse-warning 2s infinite ease-in-out;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  color: #b45309;
+  border: 1.5px solid #fbbf24;
+}
+
+.live-indicator-dot {
+  animation: live-ping 1.8s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+/* Botón interactivo con pseudoclases :hover, :active, :focus-visible */
+.btn-primary-action {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.btn-primary-action:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn-primary-action:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Chip de categoría interactivo */
+.category-chip {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.category-chip:hover:not(.active) {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  transform: translateY(-1px);
+}
+
+.category-chip:active {
+  transform: scale(0.96);
+}
+
+/* Efecto Glassmorphism */
+.glass-nav {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+/* Scrollbar refinado */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

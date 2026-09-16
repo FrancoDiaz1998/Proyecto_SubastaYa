@@ -1,12 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using SubastaYa.Domain.Entidades;
 
-namespace SubastaYa.Infrastructure.Persistencia;
+namespace SubastaYa.Infrastructure;
 
 public class SubastaYaDbContext : DbContext
 {
-    public SubastaYaDbContext(
-        DbContextOptions<SubastaYaDbContext> options): base(options)
+    public SubastaYaDbContext(DbContextOptions<SubastaYaDbContext> options): base(options)
     {
     }
 
@@ -20,19 +19,16 @@ public class SubastaYaDbContext : DbContext
 
     public DbSet<Billetera> Billeteras => Set<Billetera>();
 
-    public DbSet<MovimientoBilletera> MovimientosBilletera
-        => Set<MovimientoBilletera>();
+    public DbSet<MovimientoBilletera> MovimientosBilletera => Set<MovimientoBilletera>();
 
     public DbSet<Venta> Ventas => Set<Venta>();
 
-    public DbSet<RegistroAuditoria> RegistrosAuditoria
-        => Set<RegistroAuditoria>();
+    public DbSet<RegistroAuditoria> RegistrosAuditoria => Set<RegistroAuditoria>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(
-            typeof(SubastaYaDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(SubastaYaDbContext).Assembly);
     }
 }
