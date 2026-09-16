@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SubastaYa.Domain.Entidades;
-using SubastaYa.Infrastructure.Identidad;
 
 namespace SubastaYa.Infrastructure.Persistencia.Configuraciones;
 
@@ -43,7 +42,7 @@ public class RegistroAuditoriaConfiguracion : IEntityTypeConfiguration<RegistroA
             .HasColumnName("fecha")
             .HasColumnType("timestamp with time zone");
 
-        builder.HasOne<Usuario>()
+        builder.HasOne(registro => registro.UsuarioActor)
             .WithMany()
             .HasForeignKey(registro => registro.UsuarioActorId)
             .OnDelete(DeleteBehavior.Restrict);

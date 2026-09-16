@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SubastaYa.Domain.Entidades;
-using SubastaYa.Infrastructure.Identidad;
 
 namespace SubastaYa.Infrastructure.Persistencia.Configuraciones;
 
@@ -71,12 +70,12 @@ public class SubastaConfiguracion : IEntityTypeConfiguration<Subasta>
             .HasDefaultValue(0L)
             .IsConcurrencyToken();
 
-        builder.HasOne<Usuario>()
-            .WithMany()
+        builder.HasOne(subasta => subasta.Vendedor)
+            .WithMany(usuario => usuario.SubastasPublicadas)
             .HasForeignKey(subasta => subasta.VendedorId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne<Categoria>()
+        builder.HasOne(subasta => subasta.Categoria)
             .WithMany()
             .HasForeignKey(subasta => subasta.CategoriaId)
             .OnDelete(DeleteBehavior.Restrict);

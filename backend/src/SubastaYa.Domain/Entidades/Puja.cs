@@ -7,4 +7,7 @@ public class Puja
     public Guid PostorId { get; set; }
     public decimal Monto { get; set; }
     public DateTimeOffset Fecha { get; set; }
+
+    public Subasta? Subasta { get; set; }
+    public Usuario? Postor { get; set; }
 }

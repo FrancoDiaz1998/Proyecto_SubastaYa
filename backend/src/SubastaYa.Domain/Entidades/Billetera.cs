@@ -7,4 +7,9 @@ public class Billetera
     public decimal SaldoTotal { get; set; }
     public decimal SaldoRetenido { get; set; }
     public long Version { get; set; }
+
+    public decimal SaldoDisponible => SaldoTotal - SaldoRetenido;
+
+    public Usuario? Usuario { get; set; }
+    public ICollection<MovimientoBilletera> Movimientos { get; set; } = [];
 }

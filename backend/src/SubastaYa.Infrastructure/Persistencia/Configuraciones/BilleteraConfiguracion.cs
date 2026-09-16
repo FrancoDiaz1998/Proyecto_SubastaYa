@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SubastaYa.Domain.Entidades;
-using SubastaYa.Infrastructure.Identidad;
 
 namespace SubastaYa.Infrastructure.Persistencia.Configuraciones;
 
@@ -30,13 +29,15 @@ public class BilleteraConfiguracion : IEntityTypeConfiguration<Billetera>
             .HasColumnName("saldo_retenido")
             .HasPrecision(18, 2);
 
+        builder.Ignore(billetera => billetera.SaldoDisponible);
+
         builder.Property(billetera => billetera.Version)
             .HasColumnName("version")
             .HasDefaultValue(0L)
             .IsConcurrencyToken();
 
-        builder.HasOne<Usuario>()
-            .WithOne()
+        builder.HasOne(billetera => billetera.Usuario)
+            .WithOne(usuario => usuario.Billetera)
             .HasForeignKey<Billetera>(billetera => billetera.UsuarioId)
             .OnDelete(DeleteBehavior.Restrict);
 
