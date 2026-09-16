@@ -1,0 +1,10 @@
+@host = http://localhost:5124
+@token = PEGA_AQUI_EL_JWT
+
+### Mis compras / pujas
+GET {{host}}/api/v1/usuarios/me/pujas
+Authorization: Bearer {{token}}
+
+### Mis publicaciones
+GET {{host}}/api/v1/usuarios/me/subastas
+Authorization: Bearer {{token}}

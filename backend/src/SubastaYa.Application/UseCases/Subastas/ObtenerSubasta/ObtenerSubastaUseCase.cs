@@ -26,20 +26,38 @@ public sealed class ObtenerSubastaUseCase
         var historial = subasta.Pujas
             .OrderByDescending(puja => puja.Fecha)
             .Select(puja => new PujaResponse(
-                puja.Id, ObtenerNombre(puja.Postor), puja.Monto, puja.Fecha))
+                puja.Id, ObtenerAliasPostor(puja.Postor), puja.Monto, puja.Fecha))
             .ToList();
 
         return new ObtenerSubastaResponse(
-            subasta.Id, subasta.VendedorId, ObtenerNombre(subasta.Vendedor),
-            subasta.CategoriaId, subasta.Categoria?.Nombre ?? string.Empty,
-            subasta.Titulo, subasta.Descripcion, subasta.UrlImagen,
-            subasta.PrecioBase, subasta.IncrementoMinimo,
-            pujaLider?.Monto ?? subasta.PrecioBase, subasta.Pujas.Count,
-            subasta.FechaInicio, subasta.FechaFin, subasta.Estado.ToString(),
-            pujaLider is null ? null : ObtenerNombre(pujaLider.Postor), historial);
+            subasta.Id,
+            subasta.VendedorId,
+            ObtenerNombreUsuario(subasta.Vendedor),
+            subasta.CategoriaId,
+            subasta.Categoria?.Nombre ?? string.Empty,
+            subasta.Titulo,
+            subasta.Descripcion,
+            subasta.UrlImagen,
+            subasta.PrecioBase,
+            subasta.IncrementoMinimo,
+            pujaLider?.Monto ?? subasta.PrecioBase,
+            subasta.Pujas.Count,
+            subasta.FechaInicio,
+            subasta.FechaFin,
+            subasta.Estado.ToString(),
+            pujaLider?.PostorId,
+            pujaLider is null ? null : ObtenerAliasPostor(pujaLider.Postor),
+            historial);
     }
 
-    private static string? ObtenerNombre(Usuario? usuario) =>
+    private static string? ObtenerNombreUsuario(Usuario? usuario) =>
         usuario is null ? null :
         string.IsNullOrWhiteSpace(usuario.Nombre) ? usuario.Email : usuario.Nombre;
+
+    private static string ObtenerAliasPostor(Usuario? usuario)
+    {
+        if (usuario is null) return "Postor";
+        var id = usuario.Id.ToString("N");
+        return $"Postor #{id[^4..].ToUpperInvariant()}";
+    }
 }

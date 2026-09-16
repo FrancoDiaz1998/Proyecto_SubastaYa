@@ -1,6 +1,33 @@
-@SubastaYa.Api_HostAddress = http://localhost:5124
+@host = http://localhost:5124
+@token = PEGAR_TOKEN_AQUI
 
-GET {{SubastaYa.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+### Login comprador 1
+POST {{host}}/api/v1/auth/login
+Content-Type: application/json
 
-###
+{
+  "email": "comprador1@test.com",
+  "password": "Demo123!"
+}
+
+### Detalle de subasta
+GET {{host}}/api/v1/subastas/-1
+
+### Registrar puja autenticada
+POST {{host}}/api/v1/subastas/-1/pujas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "monto": 47000
+}
+
+### Probar rechazo por fondos insuficientes
+# Hacer login con sinfondos@test.com, pegar su token y ejecutar.
+POST {{host}}/api/v1/subastas/-1/pujas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "monto": 50000
+}

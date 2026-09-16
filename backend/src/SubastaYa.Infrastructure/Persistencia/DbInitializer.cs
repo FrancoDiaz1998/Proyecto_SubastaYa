@@ -22,28 +22,26 @@ public static class DbInitializer
         var usuarioExistente = await dbContext.Usuarios
             .FirstOrDefaultAsync(usuario => usuario.Id == vendedorId, cancellationToken);
 
-        // Compatibilidad por si ya ejecutaste el seed viejo con PasswordHash = "seed".
         if (usuarioExistente is not null)
         {
             var ids = new[] { vendedorId, comprador1Id, comprador2Id, sinFondosId };
             var usuariosSemilla = await dbContext.Usuarios
-                .Where(usuario => ids.Contains(usuario.Id)).ToListAsync(cancellationToken);
-
-            var huboCambios = false;
+                .Where(usuario => ids.Contains(usuario.Id))
+                .ToListAsync(cancellationToken);
 
             foreach (var usuario in usuariosSemilla)
             {
-                if (usuario.PasswordHash != "seed") continue;
-                usuario.PasswordHash = passwordHasher.HashPassword(usuario, passwordDemo);
-                huboCambios = true;
+                if (usuario.PasswordHash == "seed")
+                    usuario.PasswordHash = passwordHasher.HashPassword(usuario, passwordDemo);
             }
 
-            if (huboCambios) await dbContext.SaveChangesAsync(cancellationToken);
+            await AsegurarLedgerSemillaAsync(dbContext, cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
             return;
         }
 
-        await using var transaccion =
-            await dbContext.Database.BeginTransactionAsync(cancellationToken);
+        await using var transaccion = await dbContext.Database
+            .BeginTransactionAsync(cancellationToken);
 
         try
         {
@@ -53,7 +51,9 @@ public static class DbInitializer
             {
                 var usuario = new Usuario
                 {
-                    Id = id, Nombre = nombre, Email = email,
+                    Id = id,
+                    Nombre = nombre,
+                    Email = email,
                     PasswordHash = string.Empty
                 };
 
@@ -146,11 +146,14 @@ public static class DbInitializer
                 new Puja { Id = -401, SubastaId = -4, PostorId = comprador2Id, Monto = 50000, Fecha = ahora.AddHours(-5) }
             };
 
+            var movimientos = CrearLedgerSemilla(ahora);
+
             dbContext.Usuarios.AddRange(usuarios);
             dbContext.Categorias.AddRange(categorias);
             dbContext.Billeteras.AddRange(billeteras);
             dbContext.Subastas.AddRange(subastas);
             dbContext.Pujas.AddRange(pujas);
+            dbContext.Set<MovimientoBilletera>().AddRange(movimientos);
 
             await dbContext.SaveChangesAsync(cancellationToken);
             await transaccion.CommitAsync(cancellationToken);
@@ -160,5 +163,57 @@ public static class DbInitializer
             await transaccion.RollbackAsync(cancellationToken);
             throw;
         }
+    }
+
+    private static MovimientoBilletera[] CrearLedgerSemilla(DateTimeOffset ahora) =>
+    [
+        new MovimientoBilletera
+        {
+            Id = -1001, BilleteraId = -2, Tipo = TipoMovimientoBilletera.Deposito,
+            Monto = 150000,
+            OperacionId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaa1001"),
+            Fecha = ahora.AddHours(-3)
+        },
+        new MovimientoBilletera
+        {
+            Id = -1002, BilleteraId = -2, SubastaId = -1,
+            Tipo = TipoMovimientoBilletera.Retencion, Monto = 45000,
+            OperacionId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaa1002"),
+            Fecha = ahora.AddMinutes(-15)
+        },
+        new MovimientoBilletera
+        {
+            Id = -1003, BilleteraId = -3, Tipo = TipoMovimientoBilletera.Deposito,
+            Monto = 200000,
+            OperacionId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaa1003"),
+            Fecha = ahora.AddHours(-3)
+        },
+        new MovimientoBilletera
+        {
+            Id = -1004, BilleteraId = -4, Tipo = TipoMovimientoBilletera.Deposito,
+            Monto = 500,
+            OperacionId = Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaa1004"),
+            Fecha = ahora.AddHours(-3)
+        }
+    ];
+
+    private static async Task AsegurarLedgerSemillaAsync(
+        SubastaYaDbContext dbContext, CancellationToken cancellationToken)
+    {
+        var ids = new long[] { -1001, -1002, -1003, -1004 };
+        var existentes = await dbContext.Set<MovimientoBilletera>()
+            .AsNoTracking()
+            .Where(movimiento => ids.Contains(movimiento.Id))
+            .Select(movimiento => movimiento.Id)
+            .ToListAsync(cancellationToken);
+
+        var existentesSet = existentes.ToHashSet();
+        var ahora = DateTimeOffset.UtcNow;
+        var faltantes = CrearLedgerSemilla(ahora)
+            .Where(movimiento => !existentesSet.Contains(movimiento.Id))
+            .ToList();
+
+        if (faltantes.Count > 0)
+            dbContext.Set<MovimientoBilletera>().AddRange(faltantes);
     }
 }

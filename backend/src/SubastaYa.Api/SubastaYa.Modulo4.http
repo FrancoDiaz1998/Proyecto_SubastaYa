@@ -1,0 +1,30 @@
+@SubastaYa_Api_HostAddress = http://localhost:5124
+
+### Login comprador 1
+POST {{SubastaYa_Api_HostAddress}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "comprador1@test.com",
+  "password": "Demo123!"
+}
+
+### Copiá el token devuelto acá
+@token = PEGAR_TOKEN
+
+### Saldo de billetera
+GET {{SubastaYa_Api_HostAddress}}/api/v1/billeteras/saldos
+Authorization: Bearer {{token}}
+
+### Historial de movimientos
+GET {{SubastaYa_Api_HostAddress}}/api/v1/billeteras/movimientos
+Authorization: Bearer {{token}}
+
+### Acreditar saldo simulado
+POST {{SubastaYa_Api_HostAddress}}/api/v1/billeteras/depositos
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "monto": 25000
+}

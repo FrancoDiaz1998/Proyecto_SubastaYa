@@ -16,6 +16,7 @@ public sealed record ObtenerSubastaResponse(
     DateTimeOffset FechaInicio,
     DateTimeOffset FechaFin,
     string Estado,
+    Guid? PostorLiderId,
     string? PostorLider,
     IReadOnlyList<PujaResponse> HistorialPujas);
 

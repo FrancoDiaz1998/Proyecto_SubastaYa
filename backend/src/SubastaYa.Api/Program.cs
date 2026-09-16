@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using SubastaYa.API.BackgroundServices;
 using SubastaYa.API.ExceptionHandling;
 using SubastaYa.Infrastructure;
 using SubastaYa.Infrastructure.Persistencia;
@@ -15,6 +16,7 @@ builder.Services.AddControllers()
 
 builder.Services.AddOpenApi();
 builder.Services.AgregarInfraestructura(builder.Configuration);
+builder.Services.AddHostedService<SubastasFinalizacionWorker>();
 
 var jwtKey = builder.Configuration["Jwt:Key"]
     ?? throw new InvalidOperationException("No se configuró 'Jwt:Key'.");
