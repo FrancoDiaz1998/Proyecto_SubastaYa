@@ -36,4 +36,9 @@ public interface IFinalizacionSubastasRepository
     Task AgregarAuditoriaAsync(
         RegistroAuditoria registro,
         CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<int>> ObtenerIdsProgramadasParaActivarAsync(
+        DateTimeOffset ahora,
+        int limite,
+        CancellationToken cancellationToken = default);    
 }

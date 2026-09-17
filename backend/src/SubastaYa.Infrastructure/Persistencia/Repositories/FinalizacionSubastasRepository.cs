@@ -13,6 +13,25 @@ public sealed class FinalizacionSubastasRepository : IFinalizacionSubastasReposi
         _dbContext = dbContext;
     }
 
+    public async Task<IReadOnlyList<int>> ObtenerIdsProgramadasParaActivarAsync(
+        DateTimeOffset ahora,
+        int limite,
+        CancellationToken cancellationToken = default)
+    {
+        var limiteSeguro = Math.Clamp(limite, 1, 100);
+
+        return await _dbContext.Set<Subasta>()
+            .AsNoTracking()
+            .Where(subasta =>
+                subasta.Estado == EstadoSubasta.Programada &&
+                subasta.FechaInicio <= ahora &&
+                subasta.FechaFin > ahora)
+            .OrderBy(subasta => subasta.FechaInicio)
+            .Select(subasta => subasta.Id)
+            .Take(limiteSeguro)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<IReadOnlyList<int>> ObtenerIdsVencidasAsync(
         DateTimeOffset ahora,
         int limite,

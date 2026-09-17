@@ -39,7 +39,7 @@ public sealed class SubastasFinalizacionWorker : BackgroundService
             if (resultado.Fallidas > 0)
             {
                 foreach (var error in resultado.Errores)
-                    _logger.LogWarning("No se pudo finalizar una subasta vencida: {Error}", error);
+                    _logger.LogWarning("No se pudo procesar una subasta: {Error}", error);
             }
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
@@ -48,7 +48,7 @@ public sealed class SubastasFinalizacionWorker : BackgroundService
         }
         catch (Exception exception)
         {
-            _logger.LogError(exception, "Error ejecutando el worker de finalización de subastas.");
+            _logger.LogError(exception, "Error ejecutando el worker de procesamiento de subastas");
         }
     }
 }

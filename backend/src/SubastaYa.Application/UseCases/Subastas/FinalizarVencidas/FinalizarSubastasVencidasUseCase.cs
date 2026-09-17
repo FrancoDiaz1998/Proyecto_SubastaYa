@@ -22,11 +22,29 @@ public sealed class FinalizarSubastasVencidasUseCase
         CancellationToken cancellationToken = default)
     {
         var ahora = DateTimeOffset.UtcNow;
-        var ids = await _repository.ObtenerIdsVencidasAsync(
+
+        var errores = new List<string>();
+
+        var idsProgramadas = await _repository.ObtenerIdsProgramadasParaActivarAsync(
             ahora, 50, cancellationToken);
 
+        foreach (var subastaId in idsProgramadas)
+        {
+            try
+            {
+                await ActivarSubastaProgramadaAsync(subastaId, cancellationToken);
+            }
+            catch (Exception exception) when (!cancellationToken.IsCancellationRequested)
+            {
+                errores.Add(
+                    $"Activación subasta #{subastaId}: {exception.Message}");
+            }
+        }
+
+        var ids = await _repository.ObtenerIdsVencidasAsync(
+            DateTimeOffset.UtcNow, 50, cancellationToken);
+
         var procesadas = 0;
-        var errores = new List<string>();
 
         foreach (var subastaId in ids)
         {
@@ -37,7 +55,8 @@ public sealed class FinalizarSubastasVencidasUseCase
             }
             catch (Exception exception) when (!cancellationToken.IsCancellationRequested)
             {
-                errores.Add($"Subasta #{subastaId}: {exception.Message}");
+                errores.Add(
+                    $"Finalización subasta #{subastaId}: {exception.Message}");
             }
         }
 
@@ -45,6 +64,47 @@ public sealed class FinalizarSubastasVencidasUseCase
             procesadas,
             errores.Count,
             errores);
+    }
+
+    private async Task ActivarSubastaProgramadaAsync(
+        int subastaId,
+        CancellationToken cancellationToken)
+    {
+        await _unidadDeTrabajo.EjecutarEnTransaccionAsync(async ct =>
+        {
+            var subasta = await _repository.ObtenerSubastaParaActualizarAsync(
+                subastaId, ct);
+
+            if (subasta is null)
+                return;
+
+            var ahora = DateTimeOffset.UtcNow;
+
+            if (subasta.Estado != EstadoSubasta.Programada ||
+                subasta.FechaInicio > ahora ||
+                subasta.FechaFin <= ahora)
+            {
+                return;
+            }
+
+            subasta.Estado = EstadoSubasta.Activa;
+            subasta.Version++;
+
+            await _repository.AgregarAuditoriaAsync(new RegistroAuditoria
+            {
+                UsuarioActorId = null,
+                TipoEntidad = "Subasta",
+                EntidadId = subasta.Id.ToString(),
+                Accion = "CambioEstado",
+                DetallesJson = JsonSerializer.Serialize(new
+                {
+                    EstadoAnterior = EstadoSubasta.Programada.ToString(),
+                    EstadoNuevo = EstadoSubasta.Activa.ToString(),
+                    Motivo = "InicioProgramado"
+                }),
+                Fecha = ahora
+            }, ct);
+        }, cancellationToken);
     }
 
     private async Task ProcesarSubastaAsync(
