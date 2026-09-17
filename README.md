@@ -119,6 +119,52 @@ La contraseña para todos los usuarios seed es `Demo123!`.
 | Sin Fondos | `sinfondos@test.com` |
 
 
+
+## Prueba de concurrencia de pujas
+
+El proyecto incluye un script de PowerShell para comprobar el manejo de concurrencia optimista del backend. La prueba crea una subasta temporal y envía dos pujas iguales casi al mismo tiempo desde dos compradores distintos.
+
+El resultado esperado es que una solicitud sea aceptada y la otra sea rechazada con `409 Conflict`, quedando una sola puja persistida en la base de datos.
+
+Guardá el script en:
+
+```text
+scripts/prueba_concurrencia_subastaya.ps1
+```
+
+Primero levantá la API y dejala ejecutándose:
+
+```powershell
+cd backend
+dotnet run --project .\src\SubastaYa.Api\SubastaYa.Api.csproj
+```
+
+En otra terminal PowerShell, desde la raíz del proyecto, ejecutá:
+
+```powershell
+powershell -ExecutionPolicy Bypass `
+  -File .\scripts\prueba_concurrencia_subastaya.ps1
+```
+
+Si la API está usando un puerto distinto de `5124`, indicá la URL manualmente:
+
+```powershell
+powershell -ExecutionPolicy Bypass `
+  -File .\scripts\prueba_concurrencia_subastaya.ps1 `
+  -BaseUrl "http://localhost:TU_PUERTO"
+```
+
+Una ejecución correcta debería mostrar un resultado similar a:
+
+```text
+Comprador 1 -> HTTP 201 Created
+Comprador 2 -> HTTP 409 Conflict
+Cantidad de pujas de 11000 persistidas: 1
+PRUEBA OK
+```
+
+También puede ocurrir al revés: el Comprador 2 puede recibir `201` y el Comprador 1 `409`. Lo importante es que solo una de las dos pujas simultáneas quede registrada.
+
 ## Estructura
 
 ```text
